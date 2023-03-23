@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Category;
 use App\Http\Controllers\Controller;
 use App\Post;
 use Illuminate\Support\Str;
@@ -20,7 +21,9 @@ class PostController extends Controller
     {
         $data = $request->all();
 
-        if($data["search"] == null){
+        
+
+        if(!array_key_exists('search', $data) ){
             $posts = Post::orderBy('id', 'desc')->get();
         }else{
             $posts = Post::orderBy('id', 'desc')->where('nome', 'LIKE', '%' . $data["search"] . '%')->get();
@@ -36,7 +39,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('admin.posts.create');
+        $categories = Category::all();
+        return view('admin.posts.create', compact('categories'));
     }
 
     /**
@@ -48,6 +52,27 @@ class PostController extends Controller
     public function store(Request $request)
     {
         $data = $request->all();
+
+        $request->validate([
+            'nome' => 'required|min:2|max:40',
+            'content' => 'required|min:5|max:2000',
+            'cover' => 'nullable|image|max:10000',
+            'vote' => 'required',
+        ],
+        [
+            'nome.required' => 'Il nome dell\'anime è obligatorio',
+            'nome.min' => 'Il nome dell\'anime è compreso tra i 2 e i 40 caratteri',
+            'nome.max' => 'Il nome dell\'anime è compreso tra i 2 e i 40 caratteri',
+
+            'content.required' => 'Il nome dell\'anime è obligatorio',
+            'content.min' => 'Il nome dell\'anime è compreso tra i 5 e i 2000 caratteri',
+            'content.max' => 'Il nome dell\'anime è compreso tra i 5 e i 2000 caratteri',
+
+            'cover.image' => "Il file selezionato deve essere un'immagine",
+            'cover.max' => "L'immagine selezionata deve avere una dimensione massima di 10Mb",
+
+            'vote.required' => 'Il voto è obligatorio'
+        ]);
 
         $post = new Post();
         $post->fill($data);
@@ -63,6 +88,11 @@ class PostController extends Controller
             $img_path = Storage::put('uploads', $data['cover']);
             $post->cover = $img_path;
             $post->save();
+        }
+
+        /* Categorie */
+        if(array_key_exists('categories', $data)){
+            $post->categories()->sync($data['categories']);
         }
 
         return redirect()->route('admin.posts.index');
@@ -87,7 +117,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('admin.posts.edit', compact('post'));
+        $categories = Category::all();
+        return view('admin.posts.edit', compact('post', 'categories'));
     }
 
     /**
@@ -100,6 +131,24 @@ class PostController extends Controller
     public function update(Request $request, Post $post)
     {
         $data = $request->all();
+
+        $request->validate([
+            'nome' => 'required|min:2|max:40',
+            'content' => 'required|min:5|max:2000',
+            'cover' => 'nullable|image|max:10000',
+        ],
+        [
+            'nome.required' => 'Il nome dell\'anime è obligatorio',
+            'nome.min' => 'Il nome dell\'anime è compreso tra i 2 e i 40 caratteri',
+            'nome.max' => 'Il nome dell\'anime è compreso tra i 2 e i 40 caratteri',
+
+            'content.required' => 'Il nome dell\'anime è obligatorio',
+            'content.min' => 'Il nome dell\'anime è compreso tra i 5 e i 2000 caratteri',
+            'content.max' => 'Il nome dell\'anime è compreso tra i 5 e i 2000 caratteri',
+
+            'cover.image' => "Il file selezionato deve essere un'immagine",
+            'cover.max' => "L'immagine selezionata deve avere una dimensione massima di 10Mb",
+        ]);
 
         if(array_key_exists('cover', $data)){
             
@@ -114,6 +163,16 @@ class PostController extends Controller
         $post->update($data);
         $post->save();
 
+        $slug = Str::slug($post->nome . '-' . $post->id, '-'); 
+        $post->slug = $slug;
+        $post->save();
+
+        if(array_key_exists('categories', $data)){
+            $post->categories()->sync($data['categories']);
+        }else{
+            $post->categories()->sync([]);
+        }
+
         return redirect()->route('admin.posts.index');
     }
 
@@ -125,6 +184,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        $post->categories()->sync([]);
         $post->delete();
 
         return redirect()->route('admin.posts.index');

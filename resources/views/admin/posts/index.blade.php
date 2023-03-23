@@ -89,7 +89,7 @@
                                         <i class="fa-regular fa-star"></i>
                                     @endif
                                 </td>
-                                <td style="width: 400px">{{substr($post->content, 0, 100) . '...'}}</td>
+                                <td>{{substr($post->content, 0, 100) . '...'}}</td>
 
                                 {{-- action --}}
                                 <td>

@@ -8,7 +8,7 @@ class Post extends Model
 {
     protected $fillable = ['nome', 'slug', 'content', 'cover', 'vote'];
 
-    public function tags(){
+    public function categories(){
         return $this->belongsToMany('App\Category');
     }
 }

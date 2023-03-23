@@ -26,4 +26,19 @@ class AnimeController extends Controller
         ]);
 
     }
+
+    public function show($slug){
+
+        $anime = Post::where('slug', $slug)->with(['categories'])->firstOrFail();
+
+        if($anime->cover){
+            $anime->cover = asset('storage/' . $anime->cover);
+        }
+
+        return response()->json([
+            'success' => true,
+            'results' => $anime
+        ]);
+
+    }
 }
