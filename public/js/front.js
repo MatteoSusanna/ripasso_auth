@@ -2180,7 +2180,14 @@ var render = function render() {
     });
   }), 0), _vm._v(" "), _c("h5", {
     staticClass: "card-title"
-  }, [_c("strong", [_vm._v(_vm._s(_vm.anime.nome))])]), _vm._v(" "), _c("p", {
+  }, [_c("strong", [_vm._v(_vm._s(_vm.anime.nome))])]), _vm._v(" "), _c("div", {
+    staticClass: "d-flex"
+  }, _vm._l(_vm.anime.categories, function (category, index) {
+    return _c("span", {
+      key: index,
+      staticClass: "my_badge mx-1"
+    }, [_vm._v(_vm._s(category.nome))]);
+  }), 0), _vm._v(" "), _c("p", {
     staticClass: "card-text"
   }, [_vm._v(_vm._s(_vm.anime.content))])])]), _vm._v(" "), _c("a", {
     staticClass: "btn btn-primary",
@@ -2269,7 +2276,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".my_container[data-v-528697b5] {\n  width: 85%;\n  height: 100vh;\n  background-color: #0f0e17;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n}\n.my_container_card[data-v-528697b5] {\n  width: 30rem;\n  border-radius: 10px;\n  overflow: hidden;\n  border-color: 5px solid white;\n  background-color: white;\n}\n.my_card[data-v-528697b5] {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n.my_card p[data-v-528697b5] {\n  padding: 15px;\n}\n.my_img[data-v-528697b5] {\n  width: 100%;\n  height: 400px;\n  margin: 0 auto;\n}\n.my_img img[data-v-528697b5] {\n  height: 100%;\n  width: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}", ""]);
+exports.push([module.i, ".my_container[data-v-528697b5] {\n  width: 85%;\n  height: 100vh;\n  background-color: #0f0e17;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n}\n.my_container_card[data-v-528697b5] {\n  width: 30rem;\n  border-radius: 10px;\n  overflow: hidden;\n  border-color: 5px solid white;\n  background-color: white;\n}\n.my_card[data-v-528697b5] {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n.my_card p[data-v-528697b5] {\n  padding: 15px;\n}\n.my_img[data-v-528697b5] {\n  width: 100%;\n  height: 400px;\n  margin: 0 auto;\n}\n.my_img img[data-v-528697b5] {\n  height: 100%;\n  width: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.my_badge[data-v-528697b5] {\n  padding: 2px 5px;\n  font-size: 11px;\n  background-color: #0f0e17;\n  color: white;\n  border-radius: 6px;\n}", ""]);
 
 // exports
 

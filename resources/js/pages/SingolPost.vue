@@ -10,6 +10,11 @@
                     <i v-for="(n, index) in 5" :key="index" class="fa-star fa-2x" :class="(n<=anime.vote)?'fa-solid':'fa-regular'"></i>
                 </div>
                 <h5 class="card-title"><strong>{{anime.nome}}</strong></h5>
+
+                <div class="d-flex">
+                    <span class="my_badge mx-1" v-for="(category, index) in anime.categories" :key="index">{{category.nome}}</span>
+                </div>
+
                 <p class="card-text">{{anime.content}}</p>
             </div>
         </div>
@@ -83,6 +88,14 @@
         width: 100%;
         object-fit: cover;
     }
+}
+
+.my_badge{
+    padding: 2px 5px;
+    font-size: 11px;
+    background-color: #0f0e17;
+    color: white;
+    border-radius: 6px;
 }
 
 
