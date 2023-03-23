@@ -52,21 +52,27 @@
             <div class="d-flex">
                 @foreach ($categories as $category)
                     <div class="form-group form-check mr-4">
-                        <input {{(in_array($category->id, old('categories', [])))? 'checked': ''}} type="checkbox" class="form-check-input" id="category_{{$category->id}}" name="categories[]" value="{{$category->id}}">
-                        <label class="form-check-label" for="category_{{$category->id}}"><strong>{{$category->nome}}</strong></label>
+                        @if ($errors->any())
+                            <input {{(in_array($category->id, old('categories', [])))? 'checked': ''}} type="checkbox" class="form-check-input" id="category_{{$category->id}}" name="categories[]" value="{{$category->id}}">
+                            <label class="form-check-label" for="category_{{$category->id}}"><strong>{{$category->nome}}</strong></label>
+                        @else
+                            <input {{$post->categories->contains($category)?'checked':''}} type="checkbox" class="form-check-input" id="category_{{$category->id}}" name="categories[]" value="{{$category->id}}">
+                            <label class="form-check-label" for="category_{{$category->id}}"><strong>{{$category->nome}}</strong></label>
+                        @endif
                     </div>
                 @endforeach
             </div>
 
+            <?php
+                $valori = [1,2,3,4,5];
+            ?>
             {{-- voto --}}
             <div class="mb-3">
-                <label for="voto">Scegli un voto da 1 a 5</label>
-                <select id="voto" class="form-select @error('vote') is-invalid @enderror" name="vote">
-                    <option value="1" required>1</option>
-                    <option value="2" required>2</option>
-                    <option value="3" required>3</option>
-                    <option value="4" required>4</option>
-                    <option value="5" required>5</option>
+                <label for="vote">Scegli un voto da 1 a 5</label>
+                <select id="vote" nome="vote" class="form-select @error('vote') is-invalid @enderror" name="vote">
+                    @foreach ($valori as $item)
+                        <option value="{{$item}}" {{old('vote',$post->vote == $item)?'selected':''}} >{{$item}}</option>
+                    @endforeach
                 </select>
     
                 @error('vote')
