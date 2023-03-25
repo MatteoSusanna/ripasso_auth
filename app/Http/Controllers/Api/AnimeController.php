@@ -10,9 +10,18 @@ class AnimeController extends Controller
 {
     public function index(){
 
-        $anime = Post::All();
+        $anime = Post::where('visionato', 'si')->paginate(6);
+        $inCorsoAnime = Post::where('visionato', 'no')->get();
 
         $anime->each(function($anime) {
+            if ($anime->cover) {
+                $anime->cover = asset('storage/' . $anime->cover);
+            } else {
+                $anime->cover = asset('img/no_cover.jpg');
+            }
+        });
+
+        $inCorsoAnime->each(function($anime) {
             if ($anime->cover) {
                 $anime->cover = asset('storage/' . $anime->cover);
             } else {
@@ -23,6 +32,7 @@ class AnimeController extends Controller
         return response()->json([
             'status' => true,
             'results' => $anime,
+            'secondResults' => $inCorsoAnime,
         ]);
 
     }

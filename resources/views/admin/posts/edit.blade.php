@@ -79,6 +79,18 @@
                     <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
+
+            {{-- visionato --}}
+            <div class="mb-3">
+                <label for="visionato">Hai visto tutto l'anime?</label>
+                <select id="visionato" class="form-select @error('vote') is-invalid @enderror" name="visionato">
+                    <option value="si" {{old('visionato', (($post->visionato)=='si')?'selected':'')}}>SI</option>
+                    <option value="no" {{old('visionato', (($post->visionato)=='no')?'selected':'')}}>NO</option>
+                </select>
+                @error('visionato')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                @enderror
+            </div>
     
             <button type="submit" class="btn btn-primary">Modifica</button>
             <a type="submit" class="btn btn-primary" href="{{route('admin.posts.index')}}">Indietro</a>

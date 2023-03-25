@@ -1946,23 +1946,81 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      anime: []
+      anime: [],
+      animeInCorso: [],
+      counterSlider: 0,
+      counterSlider1: 1,
+      counterSlider2: 2,
+      paginaCorrente: 1,
+      ultimaPagina: null
     };
   },
   methods: {
-    getAnime: function getAnime() {
+    getAnime: function getAnime(page) {
       var _this = this;
-      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/anime').then(function (res) {
-        _this.anime = res.data.results;
-        console.log(res.data.results);
+      axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/anime', {
+        params: {
+          page: page
+        }
+      }).then(function (res) {
+        _this.anime = res.data.results.data;
+        _this.animeInCorso = res.data.secondResults;
+        _this.paginaCorrente = res.data.results.current_page;
+        _this.ultimaPagina = res.data.results.last_page;
+        console.log(_this.paginaCorrente + 'pagina corrente');
+        console.log(_this.ultimaPagina + 'ultima pagina');
       });
     },
     getTroncateText: function getTroncateText(text, numCar) {
       return text.slice(0, numCar);
+    },
+    /* direzione slider */right: function right() {
+      /* 0 */
+      if (this.counterSlider == this.animeInCorso.length - 1) {
+        this.counterSlider = 0;
+      } else {
+        this.counterSlider++;
+      }
+
+      /* 1 */
+      if (this.counterSlider1 == this.animeInCorso.length - 1) {
+        this.counterSlider1 = 0;
+      } else {
+        this.counterSlider1++;
+      }
+
+      /* 2 */
+      if (this.counterSlider2 == this.animeInCorso.length - 1) {
+        this.counterSlider2 = 0;
+      } else {
+        this.counterSlider2++;
+      }
+    },
+    left: function left() {
+      /* 0 */
+      if (this.counterSlider == 0) {
+        this.counterSlider = this.animeInCorso.length - 1;
+      } else {
+        this.counterSlider--;
+      }
+
+      /* 1 */
+      if (this.counterSlider1 == 0) {
+        this.counterSlider1 = this.animeInCorso.length - 1;
+      } else {
+        this.counterSlider1--;
+      }
+
+      /* 2 */
+      if (this.counterSlider2 == 0) {
+        this.counterSlider2 = this.animeInCorso.length - 1;
+      } else {
+        this.counterSlider2--;
+      }
     }
   },
   mounted: function mounted() {
-    this.getAnime();
+    this.getAnime(this.paginaCorrente);
   }
 });
 
@@ -1983,7 +2041,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      anime: []
+      anime: [],
+      visionato: ''
     };
   },
   methods: {},
@@ -1992,7 +2051,12 @@ __webpack_require__.r(__webpack_exports__);
     var slug = this.$route.params.slug;
     axios__WEBPACK_IMPORTED_MODULE_0___default.a.get('/api/anime/' + slug).then(function (res) {
       _this.anime = res.data.results;
-      console.log(_this.anime);
+      if (res.data.results.visionato == 'no') {
+        _this.visionato = 'In corso...';
+      } else {
+        _this.visionato = 'Completo';
+      }
+      console.log(res.data.results);
     });
   }
 });
@@ -2091,9 +2155,127 @@ var render = function render() {
   var _vm = this,
     _c = _vm._self._c;
   return _c("div", {
-    staticClass: "my_container"
+    staticClass: "my_container overflow-auto"
   }, [_c("div", {
-    staticClass: "container d-flex"
+    staticClass: "my_slider"
+  }, [_c("div", {
+    staticClass: "card m-3",
+    staticStyle: {
+      width: "18rem"
+    }
+  }, [_c("div", {
+    staticClass: "my_img"
+  }, [_c("span", {
+    staticClass: "my_banner"
+  }, [_vm._v("In corso...")]), _vm._v(" "), _c("img", {
+    staticClass: "card-img-top",
+    attrs: {
+      src: _vm.animeInCorso[_vm.counterSlider].cover,
+      alt: _vm.animeInCorso[_vm.counterSlider].nome
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "card m-3",
+    staticStyle: {
+      width: "18rem"
+    }
+  }, [_c("div", {
+    staticClass: "my_img"
+  }, [_c("span", {
+    staticClass: "my_banner"
+  }, [_vm._v("In corso...")]), _vm._v(" "), _c("img", {
+    staticClass: "card-img-top",
+    attrs: {
+      src: _vm.animeInCorso[_vm.counterSlider1].cover,
+      alt: _vm.animeInCorso[_vm.counterSlider1].nome
+    }
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "card-body text-center"
+  }, [_c("h5", {
+    staticClass: "card-title"
+  }, [_vm._v(_vm._s(_vm.animeInCorso[_vm.counterSlider1].nome))]), _vm._v(" "), _c("div", {
+    staticClass: "mb-3"
+  }, _vm._l(5, function (n, index) {
+    return _c("i", {
+      key: index,
+      staticClass: "fa-star",
+      "class": n <= _vm.animeInCorso[_vm.counterSlider1].vote ? "fa-solid" : "fa-regular"
+    });
+  }), 0), _vm._v(" "), _c("router-link", {
+    staticClass: "my_button",
+    attrs: {
+      to: {
+        name: "anime",
+        params: {
+          slug: _vm.animeInCorso[_vm.counterSlider1].slug
+        }
+      },
+      title: "Maggiori dettagli"
+    }
+  }, [_vm._v("Vedi")])], 1)]), _vm._v(" "), _c("div", {
+    staticClass: "card m-3",
+    staticStyle: {
+      width: "18rem"
+    }
+  }, [_c("div", {
+    staticClass: "my_img"
+  }, [_c("span", {
+    staticClass: "my_banner"
+  }, [_vm._v("In corso...")]), _vm._v(" "), _c("img", {
+    staticClass: "card-img-top",
+    attrs: {
+      src: _vm.animeInCorso[_vm.counterSlider2].cover,
+      alt: _vm.animeInCorso[_vm.counterSlider2].nome
+    }
+  })])]), _vm._v(" "), _c("div", {
+    staticClass: "my_direction"
+  }, [_c("div", {
+    staticClass: "right",
+    on: {
+      click: function click($event) {
+        return _vm.left();
+      }
+    }
+  }, [_c("i", {
+    staticClass: "fa-solid fa-chevron-right fa-lg"
+  })]), _vm._v(" "), _c("div", {
+    staticClass: "left",
+    on: {
+      click: function click($event) {
+        return _vm.right();
+      }
+    }
+  }, [_c("i", {
+    staticClass: "fa-solid fa-chevron-left fa-lg"
+  })])])]), _vm._v(" "), _c("div", {
+    staticClass: "my_pagination"
+  }, [_c("i", {
+    staticClass: "fa-solid fa-chevron-left fa-lg my_number_button",
+    on: {
+      click: function click($event) {
+        return _vm.getAnime(_vm.paginaCorrente - 1);
+      }
+    }
+  }), _vm._v(" "), _vm._l(_vm.ultimaPagina, function (n, index) {
+    return _c("div", {
+      key: index,
+      staticClass: "my_number_button",
+      "class": index == _vm.paginaCorrente - 1 ? "active_paginate" : "",
+      on: {
+        click: function click($event) {
+          return _vm.getAnime(_vm.paginaCorrente = index + 1);
+        }
+      }
+    }, [_vm._v("\n            " + _vm._s(index + 1) + "\n        ")]);
+  }), _vm._v(" "), _c("i", {
+    staticClass: "fa-solid fa-chevron-right fa-lg my_number_button",
+    "class": _vm.paginaCorrente == _vm.ultimaPagina ? "hidden" : "",
+    on: {
+      click: function click($event) {
+        return _vm.getAnime(_vm.paginaCorrente + 1);
+      }
+    }
+  })], 2), _vm._v(" "), _c("div", {
+    staticClass: "container d-flex flex-wrap justify-content-center"
   }, _vm._l(_vm.anime, function (anim, index) {
     return _c("div", {
       key: index,
@@ -2103,7 +2285,9 @@ var render = function render() {
       }
     }, [_c("div", {
       staticClass: "my_img"
-    }, [_c("img", {
+    }, [_c("span", {
+      staticClass: "my_banner"
+    }, [_vm._v("Completato")]), _vm._v(" "), _c("img", {
       staticClass: "card-img-top",
       attrs: {
         src: anim.cover,
@@ -2165,7 +2349,9 @@ var render = function render() {
     staticClass: "my_card"
   }, [_c("div", {
     staticClass: "my_img mb-3"
-  }, [_c("img", {
+  }, [_c("span", {
+    staticClass: "my_banner"
+  }, [_vm._v(_vm._s(_vm.visionato))]), _vm._v(" "), _c("img", {
     attrs: {
       src: _vm.anime.cover,
       alt: _vm.anime.nome
@@ -2257,7 +2443,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".my_container[data-v-04c29797] {\n  background-color: #0f0e17;\n  width: 85%;\n  height: 100vh;\n  padding: 30px;\n}\n.my_container .my_button[data-v-04c29797] {\n  border-radius: 6px;\n  background-color: #ff8906;\n  color: white;\n  padding: 5px 10px;\n  border: none;\n}\n.my_container .my_button[data-v-04c29797]:hover {\n  opacity: 0.9;\n}\n.my_img[data-v-04c29797] {\n  width: 100%;\n  height: 10rem;\n}\n.my_img img[data-v-04c29797] {\n  height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}", ""]);
+exports.push([module.i, ".my_container[data-v-04c29797] {\n  background-color: #0f0e17;\n  width: 85%;\n  height: 100vh;\n  padding: 30px;\n}\n.my_container .my_button[data-v-04c29797] {\n  border-radius: 6px;\n  background-color: #ff8906;\n  color: white;\n  padding: 5px 10px;\n  border: none;\n}\n.my_container .my_button[data-v-04c29797]:hover {\n  opacity: 0.9;\n}\n.my_img[data-v-04c29797] {\n  width: 100%;\n  height: 10rem;\n  position: relative;\n}\n.my_img img[data-v-04c29797] {\n  height: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.my_img .my_banner[data-v-04c29797] {\n  position: absolute;\n  padding: 2px 5px;\n  top: 2px;\n  left: 2px;\n  color: white;\n  background-color: red;\n  border-radius: 7px;\n}\n.my_slider[data-v-04c29797] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 100%;\n  position: relative;\n  border-radius: 10px;\n  border: 1px solid white;\n}\n.right[data-v-04c29797], .left[data-v-04c29797] {\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  position: absolute;\n  height: 45px;\n  width: 45px;\n  border-radius: 50%;\n  padding: 10px;\n  background-color: white;\n  opacity: 0.7;\n  transform: traslate(-50%, -50%);\n}\n.right[data-v-04c29797]:hover, .left[data-v-04c29797]:hover {\n  opacity: 1;\n}\n.right[data-v-04c29797]:active, .left[data-v-04c29797]:active {\n  transform: scale(0.9);\n}\n.right[data-v-04c29797] {\n  top: 50%;\n  right: 2%;\n}\n.left[data-v-04c29797] {\n  top: 50%;\n  left: 2%;\n}\n.my_pagination[data-v-04c29797] {\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  width: 100%;\n  margin: 20px 0;\n}\n.my_pagination .my_number_button[data-v-04c29797] {\n  color: white;\n  height: 30px;\n  width: 30px;\n  line-height: 30px;\n  text-align: center;\n  border: 1px solid white;\n  margin-right: 5px;\n}\n.active_paginate[data-v-04c29797] {\n  color: black !important;\n  background-color: white;\n  font-weight: bolder;\n}\n.hidden[data-v-04c29797] {\n  visibility: hidden;\n}", ""]);
 
 // exports
 
@@ -2276,7 +2462,7 @@ exports = module.exports = __webpack_require__(/*! ../../../node_modules/css-loa
 
 
 // module
-exports.push([module.i, ".my_container[data-v-528697b5] {\n  width: 85%;\n  height: 100vh;\n  background-color: #0f0e17;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n}\n.my_container_card[data-v-528697b5] {\n  width: 30rem;\n  border-radius: 10px;\n  overflow: hidden;\n  border-color: 5px solid white;\n  background-color: white;\n}\n.my_card[data-v-528697b5] {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n.my_card p[data-v-528697b5] {\n  padding: 15px;\n}\n.my_img[data-v-528697b5] {\n  width: 100%;\n  height: 400px;\n  margin: 0 auto;\n}\n.my_img img[data-v-528697b5] {\n  height: 100%;\n  width: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.my_badge[data-v-528697b5] {\n  padding: 2px 5px;\n  font-size: 11px;\n  background-color: #0f0e17;\n  color: white;\n  border-radius: 6px;\n}", ""]);
+exports.push([module.i, ".my_container[data-v-528697b5] {\n  width: 85%;\n  height: 100vh;\n  background-color: #0f0e17;\n  display: flex;\n  align-items: center;\n  justify-content: center;\n  flex-direction: column;\n}\n.my_container_card[data-v-528697b5] {\n  width: 30rem;\n  border-radius: 10px;\n  overflow: hidden;\n  border-color: 5px solid white;\n  background-color: white;\n}\n.my_card[data-v-528697b5] {\n  width: 100%;\n  display: flex;\n  flex-direction: column;\n  align-items: center;\n  justify-content: center;\n}\n.my_card p[data-v-528697b5] {\n  padding: 15px;\n}\n.my_img[data-v-528697b5] {\n  width: 100%;\n  height: 400px;\n  margin: 0 auto;\n  position: relative;\n}\n.my_img img[data-v-528697b5] {\n  height: 100%;\n  width: 100%;\n  -o-object-fit: cover;\n     object-fit: cover;\n}\n.my_badge[data-v-528697b5] {\n  padding: 2px 5px;\n  font-size: 11px;\n  background-color: #0f0e17;\n  color: white;\n  border-radius: 6px;\n}\n.my_banner[data-v-528697b5] {\n  position: absolute;\n  padding: 2px 5px;\n  top: 2px;\n  left: 2px;\n  color: white;\n  background-color: red;\n  border-radius: 7px;\n}", ""]);
 
 // exports
 

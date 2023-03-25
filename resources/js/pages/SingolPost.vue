@@ -4,6 +4,7 @@
         <div class="my_container_card mb-3">
             <div class="my_card">
                 <div class="my_img mb-3">
+                    <span class="my_banner">{{visionato}}</span>
                     <img :src="anime.cover" :alt="anime.nome">
                 </div>
                 <div class="mb-3">
@@ -31,6 +32,7 @@
         data(){
             return{
                 anime: [],
+                visionato: ''
             }
         },
         methods:{
@@ -41,7 +43,13 @@
             axios.get('/api/anime/' + slug)
             .then(res =>{
                 this.anime = res.data.results
-                console.log(this.anime)
+
+                if(res.data.results.visionato == 'no'){
+                    this.visionato = 'In corso...'
+                }else{
+                    this.visionato = 'Completo'
+                }
+                console.log(res.data.results)
             })
         }
     }
@@ -82,6 +90,7 @@
     width: 100%;
     height: 400px;
     margin: 0 auto;
+    position: relative;
 
     img{
         height: 100%;
@@ -96,6 +105,16 @@
     background-color: #0f0e17;
     color: white;
     border-radius: 6px;
+}
+
+.my_banner{
+    position: absolute;
+    padding: 2px 5px;
+    top: 2px;
+    left: 2px;
+    color: white;
+    background-color: red;
+    border-radius: 7px;
 }
 
 
