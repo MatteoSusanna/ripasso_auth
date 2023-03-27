@@ -267,6 +267,10 @@
         text-align: center;
         border: 1px solid white;
         margin-right: 5px;
+
+        &:active{
+            transform: scale(0.9);
+        }
     }
 }
 
@@ -279,6 +283,5 @@
 .hidden{
     visibility: hidden;
 }
-
 
 </style>

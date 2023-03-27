@@ -94,15 +94,22 @@
                                 {{-- action --}}
                                 <td>
                                     <div class="d-flex">
+                                        <a href="{{route('admin.generaPdf', ['post' => $post->id])}}" ><i class="fa-2x fa-regular fa-file-pdf mx-2" style="color: #df0c0c;"></i></a>
+
                                         <a class="btn btn-primary" href="{{route('admin.posts.show', ['post' => $post->id])}}">Vedi</a>
                                         <a class="btn btn-warning ms-1" href="{{route('admin.posts.edit', ['post' => $post->id])}}">Modifica</a>
-        
+
+                                        
                                         <form action="{{route('admin.posts.destroy', ['post' => $post->id])}}" method="POST">
                                             @csrf
                                             @method('DELETE')
-        
+                                            
                                             <button class="btn btn-danger ms-1" type="submit">Elimina</button>
                                         </form>
+
+                                        
+
+
                                     </div>
                                 </td>
         
